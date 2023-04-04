@@ -12,7 +12,9 @@
             // verify if phone number is a phone number
             $verified_phone_number = $utilities->checkPhoneNumber($phone_number);
             // verify if email address is a valid email
-            $verified_email_address = $utilities->checkEmail($email_address);
+            $verified_email_address = $utilities->validateEmail($email_address);
+            // check if email exist
+            $email_address_exist = $this->checkEmailExist($email_address);
             // verify if account_type is merchant
             $verified_account_type = $utilities->checkAccountTypeMerchant($account_type);
             // hash/encrypt password
@@ -31,6 +33,11 @@
             // if email_address is invalid return invalid email_address
             if (!$verified_email_address) {
                 return 'invalid email address';
+            }
+
+            // if email_address is invalid return invalid email_address
+            if (!$email_address_exist) {
+                return 'user already exist';
             }
 
             // if account_type is invalid return invalid account_type   

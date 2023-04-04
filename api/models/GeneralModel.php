@@ -32,6 +32,38 @@
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$company_id, $id]);
         }
+
+        // function to select all from login table except password where email_address and password match function parameter
+        public function getUserDetails(string $email_address) {
+            $sql = "SELECT * FROM login WHERE email_address = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$email_address]);
+            $row = $stmt->fetch();
+            return $row;
+        }
+
+        // function to check if email exist in login table
+        public function checkEmailExist(string $email) {
+            $sql = "SELECT * FROM login WHERE email = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$email]);
+            $row = $stmt->fetch();
+            if ($row) {
+                # code...
+                return true;
+            } else {
+                # code...
+                return false;
+            }
+            
+        }
+
+        // function to set login_timestamp as CURRENT_TIMESTAMP where email is given
+        public function setLoginTimestamp(string $email) {
+            $sql = "UPDATE login SET login_timestamp = CURRENT_TIMESTAMP WHERE email = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$email]);
+        }
     }
 
 ?>

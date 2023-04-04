@@ -12,7 +12,9 @@
             // verify phone_number 
             $verified_phone_number = $utilities->checkPhoneNumber($phone_number);
             // verify email_address
-            $verified_email_address = $utilities->checkEmail($email_address);
+            $verified_email_address = $utilities->validateEmail($email_address);
+            // check if email address already exist
+            $email_address_exist = $this->checkEmailExist($email_address);
             // verify account_type
             $verified_account_type = $utilities->checkAccountTypeLogistics($account_type);
             // generate unique company id
@@ -39,6 +41,11 @@
             // if email_address is invalid return invalid email_address
             if (!$verified_email_address) {
                 return 'invalid email address';
+            }
+
+            // if email_address is invalid return invalid email_address
+            if (!$email_address_exist) {
+                return 'user already exist';
             }
 
             // if account_type is invalid return invalid account_type   
