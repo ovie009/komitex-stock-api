@@ -64,6 +64,57 @@
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$email]);
         }
+
+        // function to add data to activities table
+        // columns required summary, company_id, inventory_unique_id, initiator
+        public function addActivity(string $summary, string $company_id, string $inventory_unique_id, string $initiator) {
+            $sql = "INSERT INTO activities (summary, company_id, inventory_unique_id, initiator) VALUES (?, ?, ?, ?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$summary, $company_id, $inventory_unique_id, $initiator]);
+        }
+
+        // function to create new inventory slot, 
+        // inventory slots can only be created by logistics or staff
+        // requires inventory_unique_id, inventory_name, company_id
+        public function createInventory(string $inventory_unique_id, string $inventory_name, string $company_id) {
+            $sql = "INSERT INTO inventory (inventory_unique_id, inventory_name, company_id) VALUES (?, ?, ?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$inventory_unique_id, $inventory_name, $company_id]);
+        }
+
+        // function to check if inventory unique id already exist in inventory table
+        public function checkInventoryUniqueId(string $inventory_unique_id) {
+            $sql = "SELECT * FROM inventory WHERE inventory_unique_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$inventory_unique_id]);
+            $row = $stmt->fetch();
+
+            if ($row) {
+                # code...
+                return true;
+            } else {
+                # code...
+                return false;
+            }
+            
+        }
+        
+        // function to check if inventory_name exist in inventory table
+        public function checkInventoryName(string $inventory_name) {
+            $sql = "SELECT * FROM inventory WHERE inventory_name = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$inventory_name]);
+            $row = $stmt->fetch();
+    
+            if ($row) {
+                # code...
+                return true;
+            } else {
+                # code...
+                return false;
+            }
+            
+        }
     }
 
 ?>
