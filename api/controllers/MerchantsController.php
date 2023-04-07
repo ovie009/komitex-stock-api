@@ -2,6 +2,7 @@
 
     // logisticsController class extends to LogisticsModel class
     class MerchantController extends MerchantModel {
+        // function to signup new merchant account
         public function signupMerchant(string $fullname, int $phone_number, string $email_address, string $account_type, string $password) {
             
             // create unique id
@@ -47,6 +48,37 @@
 
             $this->signup($verified_fullname, $verified_phone_number, $verified_email_address, $verified_account_type, $hashedPassword);
         }
+
+        // function to create new stock
+        public function addNewStock(string $inventory_unique_id, string $company_id, string $product, int $quantity, $details) {
+            // check company id
+            if (!$this->checkCompanyId($company_id)) return "incorrect company id";
+            // check inventory unique id
+            if (!$this->checkInventoryUniqueId($inventory_unique_id)) return "incorrect inventory unique id";
+            // check if stock already exist
+            if (!$this->checkProductExist($product)) return "product already exist";
+
+            // create stock
+            $this->createStock($inventory_unique_id, $company_id, $product, 0);
+            // create waybill
+            $this->createWaybill($inventory_unique_id, $company_id, $product, $quantity, $details);
+
+            return 'success';
+        }
+
+        // function to add new signatory, requires inventory_unique_id, $company_id, $fullname, $user_id {
+        public function addNewSignatory(string $inventory_unique_id, string $company_id, string $fullname, string $user_id) {
+            // check company id
+            if (!$this->checkCompanyId($company_id)) return "incorrect company id";
+            // check inventory unique id
+            if (!$this->checkInventoryUniqueId($inventory_unique_id)) return "incorrect inventory unique id";
+            // check if signatory already exist
+            if (!$this->checkSignatoryExist($inventory_unique_id, $user_id)) return "signatory already exist";
+
+            // create signatory
+            $this->createSignatory($inventory_unique_id, $company_id, $fullname, $user_id);
+        }
+
     }
 
 ?>

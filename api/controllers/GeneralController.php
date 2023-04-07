@@ -47,6 +47,7 @@
 
             $this->addActivity($summary, $company_id, $inventory_unique_id, $fullname);
         }
+
     }
 
 ?>
