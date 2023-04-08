@@ -50,7 +50,7 @@
         }
 
         // function to create new stock
-        public function addNewStock(string $inventory_unique_id, string $inventory_name, int $stock_id, string $company_id, string $product, int $quantity, string $details, string $product_image, $initiator) {
+        public function addNewStock(string $inventory_unique_id, string $inventory_name, int $stock_id, string $company_id, string $product, int $quantity, string $details, string $product_image, string $initiator, int $user_id) {
             // check company id
             if (!$this->checkCompanyId($company_id)) return "incorrect company id";
             // check inventory unique id
@@ -67,7 +67,7 @@
 
             $summary = 'New Product '.$product.'('.$quantity.') has been added to '.$inventory_unique_id;
 
-            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $initiator);
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $initiator, $user_id);
 
             return 'success';
         }
@@ -86,13 +86,13 @@
 
             $summary = 'New Signatory '.$fullname.', added to  '.$inventory_name;
 
-            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname);
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
 
             return 'success';
         }
 
         // function to edit product name requires product_new_name, id, stock_id, product_old_name, user_id, fullname, inventory_unique_id, company_id
-        public function editProductName(string $product_new_name, string $id, int $stock_id, string $product_old_name, string $user_id, string $changed_by, string $inventory_unique_id, string $inventory_name, string $company_id) {
+        public function editProductName(string $product_new_name, string $id, int $stock_id, string $product_old_name, int $user_id, string $changed_by, string $inventory_unique_id, string $inventory_name, string $company_id) {
             // check company id
             if (!$this->checkCompanyId($company_id)) return "incorrect company id";
             // check inventory unique id
@@ -107,7 +107,7 @@
 
             $summary = 'Product name changed from '.$product_old_name.' to '.$product_new_name.' in '.$inventory_name.' inventory';
 
-            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $changed_by);
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $changed_by, $user_id);
 
             return 'success';
         }

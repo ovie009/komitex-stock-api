@@ -49,7 +49,7 @@
         }
 
         // function to add staff company_id
-        public function setStaffCompanyId(string $company_id, int $id, string $fullname) {
+        public function setStaffCompanyId(string $company_id, int $id, string $fullname, string $user_id) {
             // if company_id exist in databse return error
             if ($this->checkCompanyId($company_id)) {
                 # code...
@@ -63,7 +63,7 @@
                 $this->setCompanyId($company_id, $id);
 
                 // staff joins team activity
-                $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname);
+                $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
                 return 'success';
             } else {
                 return 'invalid company id';

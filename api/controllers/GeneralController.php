@@ -26,7 +26,7 @@
         }
 
         // function to create inventory
-        public function createNewInventory(string $inventory_unique_id, string $inventory_name, string $company_id, string $fullname) {
+        public function addInventory(string $inventory_unique_id, string $inventory_name, string $company_id, string $fullname, int $user_id) {
             // create unique id
             $utilities = new api\utils\App();
             $inventory_unique_id = $utilities->createUniqueId(15);
@@ -45,12 +45,12 @@
             // log this event into the activities table
             $summary = 'New inventory created, '.$inventory_name;
 
-            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname);
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
         }
 
 
         // fuction to pick waybill
-        public function pickWaybill(string $id, int $waybill_quantity, int $stock_id, string $product, string $company_id, string $inventory_unique_id, string $inventory_name, string $picked_by) {
+        public function pickWaybill(string $id, int $waybill_quantity, int $stock_id, string $product, string $company_id, string $inventory_unique_id, string $inventory_name, string $picked_by, int $user_id) {
             
             // get quantity in stock
             $stock_quanity = $this->getQuantity($id);
@@ -68,9 +68,32 @@
             // set quantity in stock
             $this->setQuantity($stock_id, $updated_quantity);
             // add activity to activities table
-            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $picked_by);
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $picked_by, $user_id);
             // return success
             return 'success';
+        }
+
+        // function to send a new order to logistics
+        public function sendNewOrder(string $order_details, string $product, string $multiple_products, string $company_id, int $stock_id, string $inventory_unique_id, string $inventory_name, int $quantity, float $price, string $location, string $initiator, int $initiator_id) {
+            // check if product exist
+            if (!$this->checkProductExist($product)) return 'product doesn\'t exist';
+            // check if inventory unique id exist
+            if (!$this->checkInventoryUniqueId($inventory_unique_id)) return 'inventory unique id doesn\'t exist';
+            // check if inventory name exist
+            if (!$this->checkInventoryName($inventory_name)) return 'inventory name doesn\'t exist';
+            // check if stock id exist
+            if (!$this->checkStockIdExist($stock_id)) return 'stock id doesn\'t exist';
+            // check if quantity exist
+            if (!$this->checkQuantity($stock_id, $quantity)) return 'quantity left in stock in less than quanity in order details';
+            // check if location exist
+            if (!$this->checkLocationExist($location, $company_id)) return 'location doesn\'t exist';
+
+            // create order
+            $this->createOrder($order_details, $product, $multiple_products, $company_id, $stock_id, $inventory_unique_id, $inventory_name, $quantity, $price, $location);
+
+            // log this event into the activities table
+            $summary = 'New order posted for '.$product.' in '.$inventory_name.' inventory';
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $initiator, $initiator_id);
 
         }
     }
