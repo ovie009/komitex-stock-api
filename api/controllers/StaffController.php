@@ -55,14 +55,15 @@
                 # code...
 
                 $utilities = new api\utils\App();
-                $inventory_unique_id = $utilities->createUniqueId(150);
+                $inventory_unique_id = null;
+                $inventory_name = null;
                 $summary = $fullname.' joined your team';	
 
                 // set company_id to login table
                 $this->setCompanyId($company_id, $id);
 
                 // staff joins team activity
-                $this->addActivity($summary, $company_id, $inventory_unique_id, $fullname);
+                $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname);
                 return 'success';
             } else {
                 return 'invalid company id';

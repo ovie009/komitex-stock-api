@@ -50,7 +50,7 @@
         }
 
         // function to create new stock
-        public function addNewStock(string $inventory_unique_id, string $company_id, string $product, int $quantity, string $details, string $product_image, $initiator) {
+        public function addNewStock(string $inventory_unique_id, string $inventory_name, int $stock_id, string $company_id, string $product, int $quantity, string $details, string $product_image, $initiator) {
             // check company id
             if (!$this->checkCompanyId($company_id)) return "incorrect company id";
             // check inventory unique id
@@ -63,11 +63,11 @@
             // create stock
             $this->createStock($inventory_unique_id, $company_id, $product, $new_stock_quantity, $product_image);
             // create waybill
-            $this->createWaybill($inventory_unique_id, $company_id, $product, $quantity, $details);
+            $this->createWaybill($inventory_unique_id, $stock_id, $company_id, $product, $quantity, $details);
 
             $summary = 'New Product '.$product.'('.$quantity.') has been added to '.$inventory_unique_id;
 
-            $this->addActivity($summary, $company_id, $inventory_unique_id, $initiator);
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $initiator);
 
             return 'success';
         }
@@ -86,13 +86,13 @@
 
             $summary = 'New Signatory '.$fullname.', added to  '.$inventory_name;
 
-            $this->addActivity($summary, $company_id, $inventory_unique_id, $fullname);
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname);
 
             return 'success';
         }
 
         // function to edit product name requires product_new_name, id, stock_id, product_old_name, user_id, fullname, inventory_unique_id, company_id
-        public function editProductName(string $product_new_name, string $id, string $stock_id, string $product_old_name, string $user_id, string $changed_by, string $inventory_unique_id, string $inventory_name, string $company_id) {
+        public function editProductName(string $product_new_name, string $id, int $stock_id, string $product_old_name, string $user_id, string $changed_by, string $inventory_unique_id, string $inventory_name, string $company_id) {
             // check company id
             if (!$this->checkCompanyId($company_id)) return "incorrect company id";
             // check inventory unique id
@@ -107,7 +107,7 @@
 
             $summary = 'Product name changed from '.$product_old_name.' to '.$product_new_name.' in '.$inventory_name.' inventory';
 
-            $this->addActivity($summary, $company_id, $inventory_unique_id, $changed_by);
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $changed_by);
 
             return 'success';
         }

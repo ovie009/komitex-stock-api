@@ -45,9 +45,34 @@
             // log this event into the activities table
             $summary = 'New inventory created, '.$inventory_name;
 
-            $this->addActivity($summary, $company_id, $inventory_unique_id, $fullname);
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname);
         }
 
+
+        // fuction to pick waybill
+        public function pickWaybill(string $id, int $waybill_quantity, int $stock_id, string $product, string $company_id, string $inventory_unique_id, string $inventory_name, string $picked_by) {
+            
+            // get quantity in stock
+            $stock_quanity = $this->getQuantity($id);
+            // convert to int
+            $stock_quanity = (int)$stock_quanity;
+            $updated_quantity = $stock_quanity + $waybill_quantity;
+
+            // check if waybill is already received
+            if ($this->checkWaybillReceived($id)) return 'waybill already received';
+            
+            // activity summary
+            $summary = $waybill_quantity.' of '.$product.' picked for '.$inventory_name;
+            // set waybill as received
+            $this->receiveWaybill($id);
+            // set quantity in stock
+            $this->setQuantity($stock_id, $updated_quantity);
+            // add activity to activities table
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $picked_by);
+            // return success
+            return 'success';
+
+        }
     }
 
 ?>

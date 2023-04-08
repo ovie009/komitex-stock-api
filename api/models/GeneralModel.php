@@ -59,10 +59,10 @@
 
         // function to add data to activities table
         // columns required summary, company_id, inventory_unique_id, initiator
-        public function addActivity(string $summary, string $company_id, string $inventory_unique_id, string $initiator) {
-            $sql = "INSERT INTO activities (summary, company_id, inventory_unique_id, initiator) VALUES (?, ?, ?, ?)";
+        public function addActivity(string $summary, string $company_id, string $inventory_unique_id, string $inventory_name, string $initiator) {
+            $sql = "INSERT INTO activities (summary, company_id, inventory_unique_id, inventory_name, initiator) VALUES (?, ?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$summary, $company_id, $inventory_unique_id, $initiator]);
+            $stmt->execute([$summary, $company_id, $inventory_unique_id, $inventory_name, $initiator]);
         }
 
         // function to create new inventory slot, 
@@ -96,6 +96,42 @@
             if ($row) return true;
             else return false;
             
+        }
+
+        // function to pick waybill
+        //  set status in waybill table to received, can only be accessed by logistics and staff, require id
+        public function receiveWaybill(string $id) {
+            $sql = "UPDATE waybill SET status = 'received' WHERE id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+        }
+
+        // check if waybill is already received
+        // get data if status is received in waybill table where id is given
+        public function checkWaybillReceived(string $id) {
+            $sql = "SELECT * FROM waybill WHERE id = ? AND status = 'received'";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $row = $stmt->fetch();
+            if ($row) return true;
+            else return false;
+        }
+
+
+        // function  to set quantity in stock table where id and quantity is given, can be accessed by all account types
+        public function setQuantity(string $stock_id, int $quantity) {
+            $sql = "UPDATE stock SET quantity = ? WHERE stock_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$quantity, $stock_id]);
+        }
+
+        // function to get quantity from stock table where id is given, can be accessed by all account types
+        public function getQuantity(string $id) {
+            $sql = "SELECT quantity FROM stock WHERE id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $row = $stmt->fetch();
+            return $row;
         }
         
     }
