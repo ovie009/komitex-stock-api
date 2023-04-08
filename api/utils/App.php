@@ -69,6 +69,32 @@
             return password_verify($password, $hashed_password);
         }
 
+        // function to receive an image uisng the $_FILE superglobal,
+        // rename it and save it to a ../assets/images/folder/image_name.jpg, function requires image_name
+        public function uploadImage(string $image_name) {
+            // function needs revisiting
+            $target_dir = "..komitexstock.com/api/assets/images/";
+            $target_file = $target_dir . basename($_FILES[$image_name]["name"]);
+            $uploadOk = 1;
+            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+            // Check if image file is a actual image or fake image
+            if (isset($_POST["submit"])) {
+                $check = getimagesize($_FILES[$image_name]["tmp_name"]);
+                if ($check !== false) {
+                    echo "File is an image - " . $check["mime"] . ".";
+                    $uploadOk = 1;
+                } else {
+                    echo "File is not an image.";
+                    $uploadOk = 0;
+                }
+            }
+            // Check if file already exists
+            if (file_exists($target_file)) {
+                echo "Sorry, file already exists.";
+                $uploadOk = 0;
+            }
+        }
+
     }
 
 ?>

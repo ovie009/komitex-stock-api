@@ -5,10 +5,10 @@
     class MerchantModel extends GeneralModel {
         
         // function to add data to inventory_signatory table, requires inventory_unique_id, company_id, fullname, user_id
-        public function createSignatory(string $inventory_unique_id, string $company_id, string $fullname, string $user_id) {
-            $sql = "INSERT INTO inventory_signatory (inventory_unique_id, company_id, fullname, user_id) VALUES (?, ?, ?, ?)";
+        public function createSignatory(string $inventory_unique_id, string $inventory_name, string $company_id, string $fullname, string $user_id) {
+            $sql = "INSERT INTO inventory_signatory (inventory_unique_id, inventory_name, company_id, fullname, user_id) VALUES (?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$inventory_unique_id, $company_id, $fullname, $user_id]);
+            $stmt->execute([$inventory_unique_id, $inventory_name, $company_id, $fullname, $user_id]);
         }
 
         // function to check if inventory_unique_id and user_id already exist in inventory_signatory table
@@ -27,10 +27,19 @@
         }
         
         // function to add new data to stock table, requires inventory_unique_id, company_id, product, quantity
-        public function createStock(string $inventory_unique_id, string $company_id, string $product, string $quantity) {
-            $sql = "INSERT INTO stock (inventory_unique_id, company_id, product, quantity) VALUES (?, ?, ?, ?)";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$inventory_unique_id, $company_id, $product, $quantity]);
+        public function createStock(string $inventory_unique_id, string $company_id, string $product, string $quantity, string $product_image) {
+            if ($product_image) {
+                # code...
+                $sql = "INSERT INTO stock (inventory_unique_id, company_id, product, quantity, product_image) VALUES (?, ?, ?, ?, ?)";
+                $stmt = $this->connect()->prepare($sql);
+                $stmt->execute([$inventory_unique_id, $company_id, $product, $quantity, $product_image]);
+            } else {
+                # code...
+                $sql = "INSERT INTO stock (inventory_unique_id, company_id, product, quantity) VALUES (?, ?, ?, ?)";
+                $stmt = $this->connect()->prepare($sql);
+                $stmt->execute([$inventory_unique_id, $company_id, $product, $quantity]);
+            }
+            
         }
 
         // function to check if product already exist in stock
