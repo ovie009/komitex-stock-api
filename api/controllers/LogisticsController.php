@@ -55,6 +55,23 @@
 
             $this->logisticsSignup($verified_fullname, $verified_phone_number, $verified_email_address, $verified_account_type, $company_id, $hashedPassword);
         }
+
+        // function to add new location 
+        public function addLocation(string $company_id, string $location, float $price) {
+            // check if company_id already exist
+            if(!$this->checkCompanyId($company_id)) return 'company id doesn\'t exist';	
+
+            // check if location already exist
+            if($this->checkLocationExist($location, $company_id)) return 'location already exist';   
+            // create new location
+            $this->createLocation($company_id, $location, $price);
+        }
+
+        // function to edit location and price in location table where id is given
+        public function editLocation(string $id, string $location, float $price) {
+            // set location
+            $this->setLocation($id, $location, $price);
+        }
     }
 
 ?>
