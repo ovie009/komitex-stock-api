@@ -17,13 +17,8 @@
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$inventory_unique_id, $user_id]);
             $row = $stmt->fetch();
-            if ($row) {
-                # code...
-                return true;
-            } else {
-                # code...
-                return false;
-            }
+            if ($row) return true;
+            else return false;
         }
         
         // function to add new data to stock table, requires inventory_unique_id, company_id, product, quantity
@@ -48,13 +43,22 @@
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$product]);
             $row = $stmt->fetch();
-            if ($row) {
-                # code...
-                return true;
-            } else {
-                # code...
-                return false;
-            }
+            if ($row) return true;
+            else return false;
+        }
+
+        // function to eit product in stock table, requires id
+        public function setProductName(string $id, string $product_new_name) {
+            $sql = "UPDATE stock SET product = ? WHERE id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$product_new_name, $id]);
+        }
+
+        // function to insert data into product_name_change_history table, requires stock_id, product_new_name, product_old_name, user_id, fullname
+        public function createProductNameChangeHistory(string $stock_id, string $product_new_name, string $product_old_name, string $user_id, string $changed_by, string $inventory_unique_id, string $inventory_name, string $company_id) {
+            $sql = "INSERT INTO product_name_change_history (stock_id, product_new_name, product_old_name, user_id, changed_by, inventory_unique_id, inventory_name, company_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$stock_id, $product_new_name, $product_old_name, $user_id, $changed_by, $inventory_unique_id, $inventory_name, $company_id]);
         }
 
         // function to input data to waybill table, requires  inventory_unique_id, company_id, product, quantity, details

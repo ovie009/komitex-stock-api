@@ -19,11 +19,8 @@
             $row = $stmt->fetch();
 
             // if there is a result return true, else return false
-            if ($row) {
-                return true;
-            } else {
-                return false;
-            }
+            if ($row) return true;
+            else return false;
         }
 
         // function to set company_id to login table
@@ -48,13 +45,8 @@
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$email]);
             $row = $stmt->fetch();
-            if ($row) {
-                # code...
-                return true;
-            } else {
-                # code...
-                return false;
-            }
+            if ($row) return true;
+            else return false;
             
         }
 
@@ -89,13 +81,8 @@
             $stmt->execute([$inventory_unique_id]);
             $row = $stmt->fetch();
 
-            if ($row) {
-                # code...
-                return true;
-            } else {
-                # code...
-                return false;
-            }
+            if ($row) return true;
+            else return false;
             
         }
         
@@ -106,13 +93,8 @@
             $stmt->execute([$inventory_name]);
             $row = $stmt->fetch();
     
-            if ($row) {
-                # code...
-                return true;
-            } else {
-                # code...
-                return false;
-            }
+            if ($row) return true;
+            else return false;
             
         }
         
