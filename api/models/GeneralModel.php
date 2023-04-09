@@ -141,7 +141,6 @@
             $stmt->execute([$order_details, $product, $multiple_products, $company_id, $stock_id, $inventory_unique_id, $inventory_name, $quantity, $price, $location]);
         }
 
-        
         // function to check if product already exist in stock
         protected function checkProductExist(string $product) {
             $sql = "SELECT * FROM stock WHERE product = ?";
@@ -183,6 +182,13 @@
             // if result exist, return true else return false
             if ($row) return true;
             else return false;
+        }
+
+        // function to insert data into dispatch table, requires, order_details, inventory_name, inventory_unique_id, company_id, quantity, price, location, product, multiple_product, dispatched_by
+        protected function createDispatch(string $order_details, string $inventory_name, string $inventory_unique_id, string $company_id, int $quantity, float $price, string $location, string $product, string $multiple_product, string $dispatched_by) {
+            $sql = "INSERT INTO dispatch (order_details, inventory_name, inventory_unique_id, company_id, quantity, price, location, product, multiple_product, dispatched_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$order_details, $inventory_name, $inventory_unique_id, $company_id, $quantity, $price, $location, $product, $multiple_product, $dispatched_by]);
         }
     }
 

@@ -96,6 +96,25 @@
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $initiator, $initiator_id);
 
         }
+
+        // function to dispatch an order
+        public function dispatchOrder(string $order_details, string $inventory_name, string $inventory_unique_id, string $company_id, int $quantity, float $price, string $location, string $product, string $multiple_product, string $dispatched_by, int $user_id) {
+            // check if product exist
+            if (!$this->checkProductExist($product)) return 'product doesn\'t exist';
+            // check if inventory unique id exist
+            if (!$this->checkInventoryUniqueId($inventory_unique_id)) return 'inventory unique id doesn\'t exist';
+            // check if inventory name exist
+            if (!$this->checkInventoryName($inventory_name)) return 'inventory name doesn\'t exist';
+            // check if location exist
+            if (!$this->checkLocationExist($location, $company_id)) return 'location doesn\'t exist';
+
+            $this->createDispatch($order_details, $inventory_name, $inventory_unique_id, $company_id, $quantity, $price, $location, $product, $multiple_product, $dispatched_by);
+
+            // log this event into the activities table
+            $summary = 'Order for '.$product.' dispatched to '.$location;
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $user_id, $dispatched_by);
+            
+        }
     }
 
 ?>

@@ -76,8 +76,13 @@
 
         // function to edit location and price in location table where id is given
         public function editLocation(int $location_id, string $company_id, string $location_old_name, float $price_old, string $location_new_name, float $price_new, string $fullname, int $user_id) {
-            // set location
+            
+            // check if company_id already exist
+            if(!$this->checkCompanyId($company_id)) return 'company id doesn\'t exist';
+
+            // set location 
             $this->setLocation($location_id, $location_new_name, $price_new);
+            // add location change history
             $this->createLocationChangeHistory($location_id, $company_id, $location_old_name, $location_new_name, $price_old, $price_new);
 
             if ($location_new_name === $location_old_name) {
@@ -94,6 +99,7 @@
             $inventory_unique_id = null;
             $inventory_name = null;
 
+            // log this event into the activities table
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
 
         }
