@@ -115,6 +115,19 @@
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $user_id, $dispatched_by);
             
         }
+
+        // function to add report 
+        public function addReport(string $order_details, string $company_id, string $inventory_unique_id, string $inventory_name, int $stock_id, string $location, string $product, string $multiple_product, int $quantity, float $price) {
+
+            //  get charge for a given location and given company
+            $charge = $this->getCharge($location, $company_id);
+
+            // remittance is the difference between the price and the charge for the given location
+            $remittance = $price - (float)$charge;
+
+            // create Report
+            $this->createReport($order_details, $company_id, $inventory_unique_id, $inventory_name, $stock_id, $location, $product, $multiple_product, $quantity, $price, $charge, $remittance);
+        }
     }
 
 ?>

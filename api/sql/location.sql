@@ -1,0 +1,15 @@
+insert into location (company_id, location, charge) values ('mJl1Q2dJyvX9iwz', 'Lidköping', 3500);
+insert into location (company_id, location, charge) values ('rJc5nUvDpL6gKxh', 'Želešice', 3500);
+insert into location (company_id, location, charge) values ('rJc5nUvDpL6gKxh', 'Kisovec', 3500);
+insert into location (company_id, location, charge) values ('mJl1Q2dJyvX9iwz', 'Amper', 3000);
+insert into location (company_id, location, charge) values ('mJl1Q2dJyvX9iwz', 'Tân Hòa', 3500);
+insert into location (company_id, location, charge) values ('rJc5nUvDpL6gKxh', 'Maştağa', 4000);
+insert into location (company_id, location, charge) values ('mJl1Q2dJyvX9iwz', 'Brest', 5000);
+insert into location (company_id, location, charge) values ('rJc5nUvDpL6gKxh', 'Ziroudani', 3000);
+insert into location (company_id, location, charge) values ('mJl1Q2dJyvX9iwz', 'Isidro Fabela', 4500);
+insert into location (company_id, location, charge) values ('mJl1Q2dJyvX9iwz', 'Alcácer do Sal', 4500);
+insert into location (company_id, location, charge) values ('rJc5nUvDpL6gKxh', 'Heshengbao', 3000);
+insert into location (company_id, location, charge) values ('mJl1Q2dJyvX9iwz', 'Capitán Solari', 4000);
+insert into location (company_id, location, charge) values ('mJl1Q2dJyvX9iwz', 'San Bernardo', 3000);
+insert into location (company_id, location, charge) values ('rJc5nUvDpL6gKxh', 'Aulnay-sous-Bois', 5000);
+insert into location (company_id, location, charge) values ('mJl1Q2dJyvX9iwz', 'Mujur Satu', 3000);

@@ -190,6 +190,22 @@
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$order_details, $inventory_name, $inventory_unique_id, $company_id, $quantity, $price, $location, $product, $multiple_product, $dispatched_by]);
         }
+
+        // function to insert dat to report table, requires order_details, company_id, inventory_unique_id, inventory_name, stock_id, product, multiple_product, quantity, price, charge, remittance
+        protected function createReport(string $order_details, string $company_id, string $inventory_unique_id, string $inventory_name, int $stock_id, string $location, string $product, string $multiple_product, int $quantity, float $price, float $charge, float $remittance) {
+            $sql = "INSERT INTO report (order_details, company_id, inventory_unique_id, inventory_name, stock_id, location, product, multiple_product, quantity, price, charge, remittance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$order_details, $company_id, $inventory_unique_id, $inventory_name, $stock_id, $location, $product, $multiple_product, $quantity, $price, $charge, $remittance]);
+        }
+
+        // function to get price from location table where location and company_id is given
+        protected function getCharge(string $location, string $company_id) {
+            $sql = "SELECT charge FROM location WHERE location = ? AND company_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$location, $company_id]);
+            $row = $stmt->fetch();
+            return $row['charge'];
+        }
     }
 
 ?>

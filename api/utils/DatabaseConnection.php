@@ -8,7 +8,7 @@
         private $host = "localhost";
         private $user = "root";
         private $password = "";
-        private $dbName = "object_oriented_php";
+        private $dbName = "komitex_stock";
 
 
         protected function connect() {
