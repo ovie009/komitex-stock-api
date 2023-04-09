@@ -57,7 +57,7 @@
         }
 
         // function to add new location 
-        public function addLocation(string $company_id, string $location, float $price) {
+        public function addLocation(string $company_id, string $location, float $price, string $fullname, int $user_id) {
             // check if company_id already exist
             if(!$this->checkCompanyId($company_id)) return 'company id doesn\'t exist';	
 
@@ -65,12 +65,37 @@
             if($this->checkLocationExist($location, $company_id)) return 'location already exist';   
             // create new location
             $this->createLocation($company_id, $location, $price);
+
+            // log this event into the activities table
+            $summary = 'New location added, '.$location;
+            $inventory_unique_id = null;
+            $inventory_name = null;
+
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
         }
 
         // function to edit location and price in location table where id is given
-        public function editLocation(string $id, string $location, float $price) {
+        public function editLocation(int $location_id, string $company_id, string $location_old_name, float $price_old, string $location_new_name, float $price_new, string $fullname, int $user_id) {
             // set location
-            $this->setLocation($id, $location, $price);
+            $this->setLocation($location_id, $location_new_name, $price_new);
+            $this->createLocationChangeHistory($location_id, $company_id, $location_old_name, $location_new_name, $price_old, $price_new);
+
+            if ($location_new_name === $location_old_name) {
+                // summmary text if locations are the same
+                $summary = $location_new_name.' price changed from '.$price_old.' to '.$price_new;
+            } else {
+                // sumary text if locations are different
+                $summary = 'location details changed from '.$location_old_name.' to '.$location_new_name;
+                if ($price_new !== $price_old) {
+                    // if price changed
+                    $summary .= ' and price changed from '.$price_old.' to '.$price_new;
+                }
+            }
+            $inventory_unique_id = null;
+            $inventory_name = null;
+
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
+
         }
     }
 

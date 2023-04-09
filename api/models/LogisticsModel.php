@@ -28,6 +28,13 @@
             $stmt->execute([$location, $price, $id]);
         }
 
+        // insert data into location_change_history table requires location_id, company_id, location_old_name, location_new_name, price_old, price_new
+        protected function createLocationChangeHistory(int $location_id, string $company_id, string $location_old_name, string $location_new_name, float $price_old, float $price_new) {
+            $sql = "INSERT INTO location_change_history (location_id, company_id, location_old_name, location_new_name, price_old, price_new) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$location_id, $company_id, $location_old_name, $location_new_name, $price_old, $price_new]);
+        }
+
         
     }
 
