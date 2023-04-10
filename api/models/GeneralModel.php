@@ -153,7 +153,7 @@
         }
 
         // function to get quantity from stock table where id is given, can be accessed by all account types
-        protected function getQuantity(string $id) {
+        protected function getStockQuantity(string $id) {
             $sql = "SELECT quantity FROM stock WHERE stock_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$id]);
@@ -183,6 +183,36 @@
             $row = $stmt->fetch();
             if ($row) return true;
             else return false;
+        }
+
+        // function to get order details from orders table where order_id is given
+        protected function getOrderDetails(string $order_id) {
+            $sql = "SELECT * FROM orders WHERE order_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$order_id]);
+            $row = $stmt->fetch();
+            return $row;
+        }
+
+        // function to set status as 'Delivered' and set report in orders table where order_id is given
+        protected function setOrderDelivered(string $order_id, string $report) {
+            $sql = "UPDATE orders SET status = 'Delivered', report = ?, delivery_timestamp = CURRENT_TIMESTAMP WHERE order_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$report, $order_id]);
+        }
+
+        // function to set status as 'Cancelled' and set report in orders table where order_id is given
+        protected function setOrderCancelled(string $order_id, string $report) {
+            $sql = "UPDATE orders SET status = 'Cancelled', report = ?, delivery_timestamp = CURRENT_TIMESTAMP WHERE order_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$report, $order_id]);
+        }
+
+        // function to set status as 'Rescheduled' and set reschedule_date
+        protected function setOrderRescheduled(string $order_id, string $reschedule_date) {
+            $sql = "UPDATE orders SET status = 'Rescheduled', reschedule_date = ?, delivery_timestamp = CURRENT_TIMESTAMP WHERE order_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$reschedule_date, $order_id]);
         }
 
         // function to check if product already exist in stock
@@ -309,6 +339,8 @@
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$preferred_page, $user_id]);
         }
+
+
         
     }
 

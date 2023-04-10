@@ -46,6 +46,9 @@
             $summary = 'New inventory created, '.$inventory_name;
 
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
+
+            // return success
+            return 'success';
         }
 
 
@@ -53,7 +56,7 @@
         public function pickWaybill(string $id, int $waybill_quantity, int $stock_id, string $product, string $company_id, string $inventory_unique_id, string $inventory_name, string $picked_by, int $user_id) {
             
             // get quantity in stock
-            $stock_quanity = $this->getQuantity($id);
+            $stock_quanity = $this->getStockQuantity($id);
             // convert to int
             $stock_quanity = (int)$stock_quanity;
             $updated_quantity = $stock_quanity + $waybill_quantity;
@@ -95,6 +98,7 @@
             $summary = 'New order posted for '.$product.' in '.$inventory_name.' inventory';
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $initiator, $initiator_id);
 
+            return 'success';
         }
 
         // function to dispatch an order
@@ -124,7 +128,8 @@
             // log this event into the activities table
             $summary = 'Order for '.$product.' dispatched to '.$location;
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $user_id, $dispatched_by);
-            
+
+            return 'success';
         }
 
         // function to add report 
@@ -138,18 +143,106 @@
 
             // create Report
             $this->createReport($order_details, $company_id, $inventory_unique_id, $inventory_name, $stock_id, $location, $product, $multiple_product, $quantity, $price, $charge, $remittance);
+
+            return 'success';
         }
 
         // change preferred page on login
         public function changePreferredPage(string $preferred_page, int $user_id) {
             // set preferred page
             $this->setPreferredPage($preferred_page, $user_id);
+            return 'success';
         }
 
         // change product image in stock requires product_image and stock_id
         public function changeProductImage(string $product_image, int $stock_id) {
             // set product image
             $this->setProductImage($stock_id, $product_image);  
+            return 'success';
+        }
+
+        // function to deliver order, requires order_id and report
+        public function deliverOrder(int $order_id, int $report, string $delivered_by, int $user_id) {
+            // check if order id exist
+            if (!$this->checkOrderIdExist($order_id)) return 'order id doesn\'t exist';
+            
+            // get order details
+            $order = $this->getOrderDetails($order_id);
+            // assign valriables to order details
+            $order_details = $order['order_details'];
+            $company_id = $order['company_id'];
+            $inventory_unique_id = $order['inventory_unique_id'];
+            $inventory_name = $order['inventory_name'];
+            $stock_id = $order['stock_id'];
+            $location = $order['location'];
+            $product = $order['product'];
+            $multiple_product = $order['multiple_product'];
+            $quantity = $order['quantity'];
+            $price = $order['price'];
+            $dispatch_id = $order['dispatch_id'];
+
+            $stock_quanity = $this->getStockQuantity($stock_id);
+            // convert to int
+            $stock_quanity = (int)$stock_quanity;
+            $updated_quantity = $stock_quanity - $quantity;
+            if ($updated_quantity < 0) return 'low stock quantity';
+
+            // if dispatch_id is not equal to NULL set dispatched item as delivered
+            if ($dispatch_id != NULL) {
+                $this->deliverDispatch($dispatch_id);
+            }
+            
+            // log order to report table
+            $this->addReport($order_details, $company_id, $inventory_unique_id, $inventory_name, $stock_id, $location, $product, $multiple_product, $quantity, $price);
+
+            // set order as delivered
+            $this->setOrderDelivered($order_id, $report);
+
+            // log this event into the activities table
+            $summary = 'Order Delivered for '.$product.' in '.$inventory_name;
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $user_id, $delivered_by);
+
+            return 'success';
+        }
+
+        // function to cancel order, requires order_id, report, cancelled_by, user_id
+        protected function cancelOrder(int $order_id, int $report, string $cancelled_by, int $user_id) {
+            // check if order id exist
+            if (!$this->checkOrderIdExist($order_id)) return 'order id doesn\'t exist';
+            $this->setOrderCancelled($order_id, $report);
+
+            // get order details
+            $order = $this->getOrderDetails($order_id);
+            // assign valriables to order details
+            $company_id = $order['company_id'];
+            $inventory_unique_id = $order['inventory_unique_id'];
+            $inventory_name = $order['inventory_name'];
+            $product = $order['product'];
+
+            $summary = 'Order Cancelled for '.$product.' in '.$inventory_name;
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $user_id, $cancelled_by);
+
+            return 'success';
+        }
+
+        // function to reschedule order, requires order_id, reschedule_date, cancelled_by, user_id
+        protected function rescheduleOrder(int $order_id, string $reschedule_date, string $rescheduled_by, int $user_id) {
+            // check if order id exist
+            if (!$this->checkOrderIdExist($order_id)) return 'order id doesn\'t exist';
+            $this->setOrderRescheduled($order_id, $reschedule_date);
+
+            // get order details
+            $order = $this->getOrderDetails($order_id);
+            // assign valriables to order details
+            $company_id = $order['company_id'];
+            $inventory_unique_id = $order['inventory_unique_id'];
+            $inventory_name = $order['inventory_name'];
+            $product = $order['product'];
+
+            $summary = 'Order Reschedule for '.$product.' in '.$inventory_name.' to '.$reschedule_date;
+            $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $user_id, $rescheduled_by);
+
+            return 'success';
         }
     }
 
