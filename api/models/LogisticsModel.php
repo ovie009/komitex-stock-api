@@ -35,7 +35,13 @@
             $stmt->execute([$location_id, $company_id, $location_old_name, $location_new_name, $charge_old, $charge_new]);
         }
 
-        
+        // function to block staff from company
+        // sey blocked as true in login table
+        protected function blockStaff(int $staff_id, string $company_id) {
+            $sql = "UPDATE login SET blocked = ? WHERE id = ? AND company_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([true, $staff_id, $company_id]);
+        } 
     }
 
 

@@ -65,6 +65,20 @@
             $stmt->execute([$quantity, $details, $id]);
         }
 
+        // function to delete waybill where id is given
+        protected function deleteWaybill(string $id) {
+            $sql = "DELETE FROM waybill WHERE id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+        }
+
+        // function to delete entry from inventory_signatory where user_id is given
+        protected function blockSignatory(int $user_id, string $inventory_unique_id) {
+            $sql = "UPDATE login SET blocked = ? WHERE id = ? AND user_id = ? AND inventory_unique_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([true, $user_id, $inventory_unique_id]);
+        }
+
     }
 
 

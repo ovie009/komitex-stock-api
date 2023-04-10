@@ -98,7 +98,7 @@
         }
 
         // function to dispatch an order
-        public function dispatchOrder(string $order_details, string $inventory_name, string $inventory_unique_id, string $company_id, int $quantity, float $price, string $location, string $product, string $multiple_product, string $dispatched_by, int $user_id) {
+        public function dispatchOrder(int $order_id, string $order_details, string $inventory_name, string $inventory_unique_id, string $company_id, int $quantity, float $price, string $location, string $product, string $multiple_product, string $dispatched_by, int $user_id) {
             // check if product exist
             if (!$this->checkProductExist($product)) return 'product doesn\'t exist';
             // check if inventory unique id exist
@@ -107,8 +107,19 @@
             if (!$this->checkInventoryName($inventory_name)) return 'inventory name doesn\'t exist';
             // check if location exist
             if (!$this->checkLocationExist($location, $company_id)) return 'location doesn\'t exist';
+            // check order id exist
+            if (!$this->checkOrderIdExist($order_id)) return 'order id doesn\'t exist';
 
-            $this->createDispatch($order_details, $inventory_name, $inventory_unique_id, $company_id, $quantity, $price, $location, $product, $multiple_product, $dispatched_by);
+            // insert data into dispatch table
+            $this->createDispatch($order_id, $order_details, $inventory_name, $inventory_unique_id, $company_id, $quantity, $price, $location, $product, $multiple_product, $dispatched_by);
+
+            // get the dispatch id of data just inserted
+            $dispatch_id = $this->getDispatchId($order_id);
+
+            // by default dispatch_id in order table is NULL 
+            // but after an item has been dispatched, update the dispatch_id in order table
+            // set dispatch id in order table
+            $this->setOrderDispatchId($order_id, $dispatch_id);
 
             // log this event into the activities table
             $summary = 'Order for '.$product.' dispatched to '.$location;
@@ -127,6 +138,18 @@
 
             // create Report
             $this->createReport($order_details, $company_id, $inventory_unique_id, $inventory_name, $stock_id, $location, $product, $multiple_product, $quantity, $price, $charge, $remittance);
+        }
+
+        // change preferred page on login
+        public function changePreferredPage(string $preferred_page, int $user_id) {
+            // set preferred page
+            $this->setPreferredPage($preferred_page, $user_id);
+        }
+
+        // change product image in stock requires product_image and stock_id
+        public function changeProductImage(string $product_image, int $stock_id) {
+            // set product image
+            $this->setProductImage($stock_id, $product_image);  
         }
     }
 

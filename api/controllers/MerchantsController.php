@@ -112,6 +112,18 @@
             return 'success';
         }
 
+        // function to delete unreceived waybill only
+        public function deleteUnreceivedWaybill(int $id) {
+            // check if waybill has been received
+            if ($this->checkWaybillReceived($id)) return 'waybill has already been received';
+            // delete waybill
+            $this->deleteWaybill($id);
+        }
+
+        // function to block signatory from inventory
+        public function blockInventorySignatory(int $user_id, string $inventory_unique_id) {
+            $this->blockSignatory($user_id, $inventory_unique_id);
+        }
     }
 
 ?>
