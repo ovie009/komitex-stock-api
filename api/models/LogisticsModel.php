@@ -5,7 +5,7 @@
         
         // signup new logistics account
         // data required fullname, phone_number, email_address, account_type, comapny_id password
-        protected function logisticsSignup($fullname, $phone_number, $email_address, $account_type, $company_id, $password) {
+        protected function logisticsSignup(string $fullname, string $phone_number, string $email_address, string $account_type, string $company_id, string $password) {
 
             $sql = "INSERT INTO login (fullname, phone_number, email_address, account_type, company_id, password) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);

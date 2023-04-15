@@ -2,7 +2,7 @@
 
     // logisticsController class extends to LogisticsModel class
     class StaffController extends StaffModel {
-        public function signupNewStaff(string $fullname, int $phone_number, string $email_address, string $account_type, string $password) {
+        public function signupStaff(string $fullname, int $phone_number, string $email_address, string $account_type, string $password, string $retype_password) {
             
             // create unique id
             // instantiate App class
@@ -16,7 +16,7 @@
             // check if email exist
             $email_address_exist = $this->checkEmailExist($email_address);
             // verify if account_type is merchant
-            $verified_account_type = $utilities->checkAccountTypeMerchant($account_type);
+            $verified_account_type = $utilities->checkAccountTypeStaff($account_type);
             // hash/encrypt password
             $hashedPassword = $utilities->hashPassword($password);
 
@@ -36,7 +36,7 @@
             }
 
             // if email_address is invalid return invalid email_address
-            if (!$email_address_exist) {
+            if ($email_address_exist) {
                 return 'user already exist';
             }
 
@@ -44,8 +44,15 @@
             if (!$verified_account_type) {
                 return 'invalid account type';
             }
+            
+            // check if password and retype_password match
+            if ($password != $retype_password) {
+                return 'password does not match';
+            }	
 
             $this->signup($verified_fullname, $verified_phone_number, $verified_email_address, $verified_account_type, $hashedPassword);
+
+            return 'success';
         }
 
         // function to add staff company_id

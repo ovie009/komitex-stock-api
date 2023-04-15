@@ -2,7 +2,7 @@
 
     // logisticsController class extends to LogisticsModel class
     class LogisticsController extends LogisticsModel {
-        public function signupNewLogistics(string $fullname, int $phone_number, string $email_address, string $account_type, string $password) {
+        public function signupLogistics(string $fullname, string $phone_number, string $email_address, string $account_type, string $password, string $retype_password) {
             
             // create unique id
             // instantiate App class
@@ -20,11 +20,14 @@
             // generate unique company id
             $company_id = $utilities->createUniqueId(15);
 
+            $verified_company_id = $this->checkCompanyId($company_id);
+
             // check if company_id already exist
-            while (!$this->checkCompanyId($company_id)) {
+            while ($verified_company_id) {
                 # code...
                 // if it does, generate another id
                 $company_id = $utilities->createUniqueId(15);
+                $verified_company_id = $this->checkCompanyId($company_id);
             }
             $hashedPassword = $utilities->hashPassword($password);
 
@@ -44,7 +47,7 @@
             }
 
             // if email_address is invalid return invalid email_address
-            if (!$email_address_exist) {
+            if ($email_address_exist) {
                 return 'user already exist';
             }
 
@@ -53,7 +56,14 @@
                 return 'invalid account type';
             }
 
-            $this->logisticsSignup($verified_fullname, $verified_phone_number, $verified_email_address, $verified_account_type, $company_id, $hashedPassword);
+            // check if password and retype_password match
+            if ($password != $retype_password) {
+                return 'password does not match';
+            }	
+
+            $this->logisticsSignup($fullname, $phone_number, $email_address, $account_type, $company_id, $hashedPassword);
+
+            return 'success';
         }
 
         // function to add new location 
