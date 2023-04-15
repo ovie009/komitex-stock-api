@@ -25,7 +25,7 @@
 
         // function to check phonenumber reg expression of atleast 11 digits but maximum of 13
         public function checkPhoneNumber(string $phone_number) {
-            return preg_match("/^[0-9]{11,13}$/", $phone_number);
+            return preg_match("/^[0-9]{10,13}$/", $phone_number);
         }
 
         // function to validate email
@@ -35,7 +35,7 @@
 
         // function to check if account_type is logistics
         public function checkAccountTypeLogistics(string $account_type) {
-            if ($account_type === 'logistics') {
+            if ($account_type === 'Logistics') {
                 # code...
                 return true;
             } else {
@@ -45,7 +45,7 @@
 
         // function to check if account_type is merchant
         public function checkAccountTypeMerchant(string $account_type) {
-            if ($account_type === 'merchant') {
+            if ($account_type === 'Merchant') {
                 # code...
                 return true;
             } else {
@@ -55,7 +55,7 @@
 
         // function to check if account_type is staff
         public function checkAccountTypeStaff(string $account_type) {
-            if ($account_type === 'staff') {
+            if ($account_type === 'Staff') {
                 # code...
                 return true;
             } else {

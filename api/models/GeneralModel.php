@@ -6,7 +6,7 @@
         // data required fullname, phone_number, email_address, account_type, password
         protected function signup(string $fullname, int $phone_number, string $email_address, string $account_type, string $password) {
 
-            $sql = "INSERT INTO login (fullname, phone_number, email_address, account_type, password) VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO login (fullname, phone_number, email_address, account_type, password) VALUES (?, ?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$fullname, $phone_number, $email_address, $account_type, $password]);
         }
@@ -17,6 +17,7 @@
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$company_id]);
             $row = $stmt->fetch();
+            
             // if there is a result return true, else return false
             if ($row) return true;
             else return false;
@@ -40,7 +41,7 @@
 
         // function to check if email exist in login table
         protected function checkEmailExist(string $email) {
-            $sql = "SELECT * FROM login WHERE email = ?";
+            $sql = "SELECT * FROM login WHERE email_address = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$email]);
             $row = $stmt->fetch();

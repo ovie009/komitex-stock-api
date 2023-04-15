@@ -37,7 +37,7 @@
             }
 
             // if email_address is invalid return invalid email_address
-            if (!$email_address_exist) {
+            if ($email_address_exist) {
                 return 'user already exist';
             }
 
@@ -51,7 +51,7 @@
                 return 'password does not match';
             }	
 
-            $this->signup($verified_fullname, $verified_phone_number, $verified_email_address, $verified_account_type, $hashedPassword);
+            $this->signup($fullname, $phone_number, $email_address, $account_type, $hashedPassword);
 
             return 'success';
         }

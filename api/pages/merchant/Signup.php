@@ -10,14 +10,12 @@
     // include autoloader.php file for the classes
     require_once '../../utils/autoloader.php';
 
-    // $user_data = json_decode(file_get_contents("php://input"));
+    $user_data = json_decode(file_get_contents("php://input"));
 
     $merchantController = new MerchantController();
 
-    echo $merchantController->test();
+    $response = $merchantController->signupMerchant($user_data->fullname, $user_data->phone_number, $user_data->email_address, $user_data->account_type, $user_data->password, $user_data->retype_password);
 
-    // $utilities = new api\utils\App();
-
-    // echo $merchantController->signupMerchant($user_data->fullname, (int)$user_data->phone_number, $user_data->email_address, $user_data->account_type, $user_data->password, $user_data->retype_password);
-
+    // send response
+    echo json_encode($response);
 ?>
