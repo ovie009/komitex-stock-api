@@ -3,7 +3,7 @@
     // logisticsController class extends to LogisticsModel class
     class MerchantController extends MerchantModel {
         // function to signup new merchant account
-        public function signupMerchant(string $fullname, int $phone_number, string $email_address, string $account_type, string $password) {
+        public function signupMerchant(string $fullname, int $phone_number, string $email_address, string $account_type, string $password, string $retype_password) {
             
             // create unique id
             // instantiate App class
@@ -45,6 +45,11 @@
             if (!$verified_account_type) {
                 return 'invalid account type';
             }
+
+            // check if password and retype_password match
+            if ($password != $retype_password) {
+                return 'password does not match';
+            }	
 
             $this->signup($verified_fullname, $verified_phone_number, $verified_email_address, $verified_account_type, $hashedPassword);
 
@@ -120,15 +125,18 @@
             if ($this->checkWaybillReceived($id)) return 'waybill has already been received';
             // delete waybill
             $this->deleteWaybill($id);
-
-            return 'success';
         }
 
         // function to block signatory from inventory
         public function blockInventorySignatory(int $user_id, string $inventory_unique_id) {
             $this->blockSignatory($user_id, $inventory_unique_id);
+        }
 
-            return 'success';
+        public function test() {
+            $utilities = new App();
+            $test = $utilities->test_variable;
+
+            return $test;
         }
     }
 

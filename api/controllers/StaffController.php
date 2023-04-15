@@ -6,7 +6,7 @@
             
             // create unique id
             // instantiate App class
-            $utilities = new api\utils\App();
+            $utilities = new App();
             // verify fullname is a alpabetic string
             $verified_fullname = $utilities->checkFullname($fullname);
             // verify if phone number is a phone number
@@ -54,9 +54,8 @@
             if ($this->checkCompanyId($company_id)) {
                 # code...
 
-                $utilities = new api\utils\App();
-                $inventory_unique_id = null;
-                $inventory_name = null;
+                $inventory_unique_id = '';
+                $inventory_name = '';
                 $summary = $fullname.' joined your team';	
 
                 // set company_id to login table

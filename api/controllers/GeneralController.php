@@ -12,7 +12,7 @@
             else {
                 // if user exist
                 $this->user = $this->getUserDetails($email_address);
-                $utility = new api\utils\App;
+                $utility = new App;
                 if ($utility->checkPassword($password, $this->user['password'])) {
                     // if password matches
                     $this->setLoginTimestamp($email_address);
@@ -28,7 +28,7 @@
         // function to create inventory
         public function addInventory(string $inventory_unique_id, string $inventory_name, string $company_id, string $fullname, int $user_id) {
             // create unique id
-            $utilities = new api\utils\App();
+            $utilities = new App();
             $inventory_unique_id = $utilities->createUniqueId(15);
             // create inventory
             // while inventory unique id exist, create another unique id

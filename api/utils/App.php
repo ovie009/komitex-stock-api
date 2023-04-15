@@ -1,8 +1,7 @@
 <?php
-
-    namespace api\utils;
-
     class App {
+
+        public $test_variable = "Hello World";
 
         // method to create unique id with all alphaNumeric characters and recieves a parameter to determine the lenght of the unique id
         public function createUniqueId(int $length) {

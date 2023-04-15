@@ -1,0 +1,37 @@
+RewriteEngine On
+
+# Rewrite rules for logistics account type
+RewriteRule ^logistics/activities$ logistics/activities.php [L]
+RewriteRule ^logistics/dispatch$ logistics/dispatch.php [L]
+RewriteRule ^logistics/home$ logistics/home.php [L]
+RewriteRule ^logistics/inventory$ logistics/inventory.php [L]
+RewriteRule ^logistics/location$ logistics/location.php [L]
+RewriteRule ^logistics/login$ logistics/login.php [L]
+RewriteRule ^logistics/orders$ logistics/orders.php [L]
+RewriteRule ^logistics/signup$ logistics/signup.php [L]
+RewriteRule ^logistics/stock$ logistics/stock.php [L]
+RewriteRule ^logistics/waybill$ logistics/waybill.php [L]
+
+# Rewrite rules for merchant account type
+RewriteRule ^merchant/activities$ merchant/activities.php [L]
+RewriteRule ^merchant/dispatch$ merchant/dispatch.php [L]
+RewriteRule ^merchant/home$ merchant/home.php [L]
+RewriteRule ^merchant/inventory$ merchant/inventory.php [L]
+RewriteRule ^merchant/location$ merchant/location.php [L]
+RewriteRule ^merchant/login$ merchant/login.php [L]
+RewriteRule ^merchant/orders$ merchant/orders.php [L]
+RewriteRule ^merchant/signup$ merchant/signup.php [L]
+RewriteRule ^merchant/stock$ merchant/stock.php [L]
+RewriteRule ^merchant/waybill$ merchant/waybill.php [L]
+
+# Rewrite rules for staff account type
+RewriteRule ^staff/activities$ staff/activities.php [L]
+RewriteRule ^staff/dispatch$ staff/dispatch.php [L]
+RewriteRule ^staff/home$ staff/home.php [L]
+RewriteRule ^staff/inventory$ staff/inventory.php [L]
+RewriteRule ^staff/location$ staff/location.php [L]
+RewriteRule ^staff/login$ staff/login.php [L]
+RewriteRule ^staff/orders$ staff/orders.php [L]
+RewriteRule ^staff/signup$ staff/signup.php [L]
+RewriteRule ^staff/stock$ staff/stock.php [L]
+RewriteRule ^staff/waybill$ staff/waybill.php [L]

@@ -6,7 +6,7 @@
             
             // create unique id
             // instantiate App class
-            $utilities = new api\utils\App();
+            $utilities = new App();
             // verify fullname
             $verified_fullname = $utilities->checkFullname($fullname);
             // verify phone_number 
@@ -68,8 +68,8 @@
 
             // log this event into the activities table
             $summary = 'New location added, '.$location;
-            $inventory_unique_id = null;
-            $inventory_name = null;
+            $inventory_unique_id = '';
+            $inventory_name = '';
 
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
         }
@@ -96,8 +96,8 @@
                     $summary .= ' and charge changed from '.$charge_old.' to '.$charge_new;
                 }
             }
-            $inventory_unique_id = null;
-            $inventory_name = null;
+            $inventory_unique_id = '';
+            $inventory_name = '';
 
             // log this event into the activities table
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
