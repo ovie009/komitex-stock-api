@@ -30,9 +30,21 @@
             $stmt->execute([$company_id, $id]);
         }
 
+        // function to receive session_token and email_address and check if it exist in login table
+        protected function checkSessionToken(string $session_token, string $email_address) {
+            $sql = "SELECT * FROM login WHERE session_token = ? AND email_address = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$session_token, $email_address]);
+            $row = $stmt->fetch();
+            
+            // if there is a result return true, else return false
+            if ($row) return true;
+            else return false;
+        }
+
         // function to select all from login table except password where email_address and password match function parameter
         protected function getUserDetails(string $email_address) {
-            $sql = "SELECT * FROM login WHERE email_address = ?";
+            $sql = "SELECT account_type, company_id, id, fullname, phone_number, preferred_page, profile_image, session_token, password  FROM login WHERE email_address = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$email_address]);
             $row = $stmt->fetch();
@@ -59,9 +71,16 @@
 
         // function to set login_timestamp as CURRENT_TIMESTAMP where email is given
         protected function setLoginTimestamp(string $email) {
-            $sql = "UPDATE login SET login_timestamp = CURRENT_TIMESTAMP WHERE email = ?";
+            $sql = "UPDATE login SET login_timestamp = CURRENT_TIMESTAMP WHERE email_address = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$email]);
+        }
+
+        // set session_token in login table where email_address and session_token is given
+        public function setSessionToken(string $email_address, string $session_token) {
+            $sql = "UPDATE login SET session_token = ? WHERE email_address = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$session_token, $email_address]);
         }
 
         // function to add data to activities table

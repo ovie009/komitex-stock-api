@@ -11,11 +11,20 @@
             if (!$this->checkEmailExist($email_address)) return 'user doesn\'t exist';
             else {
                 // if user exist
-                $this->user = $this->getUserDetails($email_address);
                 $utility = new App;
+                $session_token = 'KS'.$utility->createUniqueId(28);
+                // set session token
+                $this->setSessionToken($email_address, $session_token);
+                // set login timestamp
+                $this->setLoginTimestamp($email_address);
+                // get user information
+                $this->user = $this->getUserDetails($email_address);
                 if ($utility->checkPassword($password, $this->user['password'])) {
                     // if password matches
-                    $this->setLoginTimestamp($email_address);
+
+                    // filter out ['password'] from the array
+                    unset($this->user['password']);
+
                     // return user
                     return $this->user;
                 } else {
@@ -243,6 +252,14 @@
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $user_id, $rescheduled_by);
 
             return 'success';
+        }
+
+        // function to check if session_token exist, requires session_token and email_address
+        public function checkSessionTokenExist(string $session_token, string $email_address) {
+            // check if session token exist
+            $tokenExist = $this->checkSessionToken($session_token, $email_address);
+
+            return $tokenExist;
         }
     }
 
