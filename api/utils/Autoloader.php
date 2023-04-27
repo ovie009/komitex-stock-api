@@ -10,6 +10,9 @@
         } else if (file_exists('../../models/' . $class . '.php')) {
             // if class exists
             require_once '../../models/' . $class . '.php';
+        } else if (file_exists('../../views/' . $class . '.php')) {
+            // if class exists
+            require_once '../../views/' . $class . '.php';
         } else if (file_exists('../../utils/' . $class . '.php')) {
             // if class exists
             require_once '../../utils/' . $class . '.php';

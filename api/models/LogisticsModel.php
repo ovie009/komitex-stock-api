@@ -10,8 +10,6 @@
             $sql = "INSERT INTO login (fullname, phone_number, email_address, account_type, company_id, password) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$fullname, $phone_number, $email_address, $account_type, $company_id, $password]);
-
-            return 'success';
         }
 
         // function to add new location to location table, requires company_id, location, charge
@@ -36,12 +34,20 @@
         }
 
         // function to block staff from company
-        // sey blocked as true in login table
+        // set blocked as true in login table
         protected function blockStaff(int $staff_id, string $company_id) {
             $sql = "UPDATE login SET blocked = ? WHERE id = ? AND company_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([true, $staff_id, $company_id]);
         } 
+
+        // function to check if a logistics have created any inventory
+        protected function checkForInventory(string $company_id) {
+            $sql = "SELECT * FROM inventory WHERE company_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$company_id]);
+            return $stmt->rowCount();
+        }
     }
 
 
