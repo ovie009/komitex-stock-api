@@ -14,7 +14,7 @@
 
     $staffController = new StaffController();
 
-    $response = $staffController->signupStaff($user_data->fullname, $user_data->username, $user_data->phone_number, $user_data->email_address, $user_data->account_type, $user_data->password, $user_data->retype_password);
+    $response = $staffController->signupStaff($user_data->fullname, $user_data->phone_number, $user_data->email_address, $user_data->account_type, $user_data->password, $user_data->retype_password);
 
     // send response
     echo json_encode($response);
