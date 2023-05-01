@@ -12,13 +12,14 @@
 
     $package = json_decode(file_get_contents("php://input"));
 
-    $logisticsView = new LogisticsView();
+    $logisticsView = new LogisticsViews();
 
     switch ($package->action) {
         case 'checkForInventory':
             # code...
             // check for inventory
             $response = $logisticsView->checkInventory($package->company_id);
+            $data = array('inventory' => $response);
             break;
         
         default:
@@ -26,5 +27,5 @@
             break;
     }
 
-    echo json_encode($response);
+    echo json_encode($data);
 ?>

@@ -2,7 +2,7 @@
 
     // logisticsController class extends to LogisticsModel class
     class StaffController extends StaffModel {
-        public function signupStaff(string $fullname, int $phone_number, string $email_address, string $account_type, string $password, string $retype_password) {
+        public function signupStaff(string $fullname, string $username, int $phone_number, string $email_address, string $account_type, string $password, string $retype_password) {
             
             // create unique id
             // instantiate App class
@@ -15,10 +15,15 @@
             $verified_email_address = $utilities->validateEmail($email_address);
             // check if email exist
             $email_address_exist = $this->checkEmailExist($email_address);
+            // check if username exist
+            $username_exist = $this->checkUsernameExist($username);
             // verify if account_type is merchant
             $verified_account_type = $utilities->checkAccountTypeStaff($account_type);
             // hash/encrypt password
             $hashedPassword = $utilities->hashPassword($password);
+
+            // if space is in username string
+            $space_in_username = $utilities->checkUsernameCharacters($username);
 
             // if fullname is invalid return invalid fullname
             if (!$verified_fullname) {
@@ -37,7 +42,17 @@
 
             // if email_address is invalid return invalid email_address
             if ($email_address_exist) {
-                return 'user already exist';
+                return 'email already exist';
+            }
+
+            // if username already exist return invalid username
+            if ($username_exist) {
+                return 'username already exist';
+            }
+
+            // if username string has space
+            if ($space_in_username) {
+                return 'Usernames should not have the character space \' \' ';
             }
 
             // if account_type is invalid return invalid account_type   
@@ -50,7 +65,7 @@
                 return 'password does not match';
             }	
 
-            $this->signup($verified_fullname, $verified_phone_number, $verified_email_address, $verified_account_type, $hashedPassword);
+            $this->signup($fullname, $username, $phone_number, $email_address, $account_type, $hashedPassword);
 
             return 'success';
         }
