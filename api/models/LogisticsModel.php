@@ -5,11 +5,11 @@
         
         // signup new logistics account
         // data required fullname, phone_number, email_address, account_type, comapny_id password
-        protected function logisticsSignup(string $fullname, string $username, string $phone_number, string $email_address, string $account_type, string $company_id, string $password) {
+        protected function logisticsSignup(string $fullname, string $phone_number, string $email_address, string $account_type, string $company_id, string $password) {
 
-            $sql = "INSERT INTO login (fullname, username, phone_number, email_address, account_type, company_id, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO login (fullname, phone_number, email_address, account_type, company_id, password) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$fullname, $username, $phone_number, $email_address, $account_type, $company_id, $password]);
+            $stmt->execute([$fullname, $phone_number, $email_address, $account_type, $company_id, $password]);
         }
 
         // function to add new location to location table, requires company_id, location, charge

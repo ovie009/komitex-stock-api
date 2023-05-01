@@ -18,13 +18,6 @@
             return password_hash($password, PASSWORD_DEFAULT);
         }
 
-        // function to checck if space ' ' character is in username, return true if it is else return false
-        public function checkUsernameCharacters(string $username) {
-            // if ' ' is a substring of username return true
-            if (strpos($username, ' ') !== false ) return true;
-            else return false;
-        }
-
         // function to check if a received string, fullname matches the reg expression of at least 3 words of only alphabetic characters, -, space and '
         public function checkFullname(string $fullname) {
             return preg_match("/^[a-zA-Z-' ]{3,}$/", $fullname);

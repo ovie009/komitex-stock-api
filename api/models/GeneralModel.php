@@ -4,11 +4,11 @@
 
         // signup new staff or merchant account
         // data required fullname, phone_number, email_address, account_type, password
-        protected function signup(string $fullname, string $username, int $phone_number, string $email_address, string $account_type, string $password) {
+        protected function signup(string $fullname, int $phone_number, string $email_address, string $account_type, string $password) {
 
-            $sql = "INSERT INTO login (fullname, username, phone_number, email_address, account_type, password) VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO login (fullname, phone_number, email_address, account_type, password) VALUES (?, ?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$fullname, $username, $phone_number, $email_address, $account_type, $password]);
+            $stmt->execute([$fullname, $phone_number, $email_address, $account_type, $password]);
         }
 
         // function to check if company_id already exist in login table
@@ -56,17 +56,6 @@
             $sql = "SELECT * FROM login WHERE email_address = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$email]);
-            $row = $stmt->fetch();
-            // if exist, return true else return false
-            if ($row) return true;
-            else return false;  
-        }
-
-        // function to check if username exist in login table
-        protected function checkUsernameExist(string $username) {
-            $sql = "SELECT * FROM login WHERE username = ?";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$username]);
             $row = $stmt->fetch();
             // if exist, return true else return false
             if ($row) return true;

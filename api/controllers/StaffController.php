@@ -2,7 +2,10 @@
 
     // logisticsController class extends to LogisticsModel class
     class StaffController extends StaffModel {
-        public function signupStaff(string $fullname, string $username, int $phone_number, string $email_address, string $account_type, string $password, string $retype_password) {
+
+        public $user;
+
+        public function signupStaff(string $fullname, int $phone_number, string $email_address, string $account_type, string $password, string $retype_password) {
             
             // create unique id
             // instantiate App class
@@ -15,15 +18,10 @@
             $verified_email_address = $utilities->validateEmail($email_address);
             // check if email exist
             $email_address_exist = $this->checkEmailExist($email_address);
-            // check if username exist
-            $username_exist = $this->checkUsernameExist($username);
             // verify if account_type is merchant
             $verified_account_type = $utilities->checkAccountTypeStaff($account_type);
             // hash/encrypt password
             $hashedPassword = $utilities->hashPassword($password);
-
-            // if space is in username string
-            $space_in_username = $utilities->checkUsernameCharacters($username);
 
             // if fullname is invalid return invalid fullname
             if (!$verified_fullname) {
@@ -45,29 +43,32 @@
                 return 'email already exist';
             }
 
-            // if username already exist return invalid username
-            if ($username_exist) {
-                return 'username already exist';
-            }
-
-            // if username string has space
-            if ($space_in_username) {
-                return 'Usernames should not have the character space \' \' ';
-            }
-
             // if account_type is invalid return invalid account_type   
             if (!$verified_account_type) {
                 return 'invalid account type';
             }
-            
+
             // check if password and retype_password match
             if ($password != $retype_password) {
                 return 'password does not match';
-            }	
+            }
 
-            $this->signup($fullname, $username, $phone_number, $email_address, $account_type, $hashedPassword);
+            // sigunup the user
+            $this->signup($fullname, $phone_number, $email_address, $account_type, $hashedPassword);
 
-            return 'success';
+            $session_token = 'KS'.$utilities->createUniqueId(28);
+            // set session token
+            $this->setSessionToken($email_address, $session_token);
+            // set login timestamp
+            $this->setLoginTimestamp($email_address);
+            // get user information
+            $this->user = $this->getUserDetails($email_address);
+
+            // filter out ['password'] from the array
+            unset($this->user['password']);
+
+            // return user
+            return $this->user;
         }
 
         // function to add staff company_id

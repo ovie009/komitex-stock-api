@@ -11,15 +11,15 @@
             if (!$this->checkEmailExist($email_address)) return 'user doesn\'t exist';
             else {
                 // if user exist
-                $utility = new App;
-                $session_token = 'KS'.$utility->createUniqueId(28);
+                $utilities = new App;
+                $session_token = 'KS'.$utilities->createUniqueId(28);
                 // set session token
                 $this->setSessionToken($email_address, $session_token);
                 // set login timestamp
                 $this->setLoginTimestamp($email_address);
                 // get user information
                 $this->user = $this->getUserDetails($email_address);
-                if ($utility->checkPassword($password, $this->user['password'])) {
+                if ($utilities->checkPassword($password, $this->user['password'])) {
                     // if password matches
 
                     // filter out ['password'] from the array
