@@ -25,7 +25,7 @@
 
         // function to set company_id to login table
         protected function setCompanyId(string $company_id, int $id) {
-            $sql = "UPDATE login SET company_id = ? WHERE id = ?";
+            $sql = "UPDATE login SET company_id = ? WHERE user_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$company_id, $id]);
         }
@@ -44,7 +44,7 @@
 
         // function to select all from login table except password where email_address and password match function parameter
         protected function getUserDetails(string $email_address) {
-            $sql = "SELECT account_type, company_id, id, fullname, phone_number, preferred_page, profile_image, session_token, password  FROM login WHERE email_address = ?";
+            $sql = "SELECT account_type, company_id, user_id, fullname, phone_number, preferred_page, profile_image, session_token, password  FROM login WHERE email_address = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$email_address]);
             $row = $stmt->fetch();
@@ -64,7 +64,7 @@
 
         // function to set profile_image in login table requires profile_image and id
         protected function setProfileImage(string $profile_image, int $id) {
-            $sql = "UPDATE login SET profile_image = ? WHERE id = ?";
+            $sql = "UPDATE login SET profile_image = ? WHERE user_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$profile_image, $id]);
         }
@@ -148,7 +148,7 @@
         // check if waybill is already received
         // get data if status is received in waybill table where id is given
         protected function checkWaybillReceived(string $id) {
-            $sql = "SELECT * FROM waybill WHERE id = ? AND status = 'received'";
+            $sql = "SELECT * FROM waybill WHERE waybill_id = ? AND status = 'received'";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$id]);
             $row = $stmt->fetch();
@@ -160,7 +160,7 @@
         // function to pick waybill
         //  set status in waybill table to received, can only be accessed by logistics and staff, require id
         protected function receiveWaybill(string $id) {
-            $sql = "UPDATE waybill SET status = 'received', received_timestamp = CURRENT_TIMESTAMP WHERE id = ?";
+            $sql = "UPDATE waybill SET status = 'received', received_timestamp = CURRENT_TIMESTAMP WHERE waybill_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$id]);
         }
@@ -308,7 +308,7 @@
 
         // function to select id from dispatch table where stock_id is given and return id
         protected function getDispatchId(string $stock_id) {
-            $sql = "SELECT id FROM dispatch WHERE stock_id = ?";
+            $sql = "SELECT dispatch_id FROM dispatch WHERE stock_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$stock_id]);
             $row = $stmt->fetch();
@@ -324,14 +324,14 @@
 
         // set price in report table where id and price is given
         protected function setReportPrice(int $report_id, float $price) {
-            $sql = "UPDATE report SET price = ? WHERE id = ?";
+            $sql = "UPDATE report SET price = ? WHERE report_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$price, $report_id]);
         }
 
         // set charge in report table where id and charge is given
         protected function setReportCharge(int $report_id, float $charge) {
-            $sql = "UPDATE report SET charge = ? WHERE id = ?";
+            $sql = "UPDATE report SET charge = ? WHERE report_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$charge, $report_id]);
         }
@@ -355,7 +355,7 @@
         // function to set preferred_page in login table
         // this is the page that loads on startup after login
         protected function setPreferredPage(string $preferred_page, int $user_id) {
-            $sql = "UPDATE login SET preferred_page = ? WHERE id = ?";
+            $sql = "UPDATE login SET preferred_page = ? WHERE user_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$preferred_page, $user_id]);
         }

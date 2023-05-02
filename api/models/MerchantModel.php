@@ -39,7 +39,7 @@
 
         // function to eit product in stock table, requires id
         protected function setProductName(string $id, string $product_new_name) {
-            $sql = "UPDATE stock SET product = ? WHERE id = ?";
+            $sql = "UPDATE stock SET product = ? WHERE stock_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$product_new_name, $id]);
         }
@@ -60,21 +60,21 @@
 
         // function to edit waybill quanity and details where id is given
         protected function editWaybill(string $id, string $quantity, string $details) {
-            $sql = "UPDATE waybill SET quantity = ?, details = ? WHERE id = ?";
+            $sql = "UPDATE waybill SET quantity = ?, details = ? WHERE waybill_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$quantity, $details, $id]);
         }
 
         // function to delete waybill where id is given
         protected function deleteWaybill(string $id) {
-            $sql = "DELETE FROM waybill WHERE id = ?";
+            $sql = "DELETE FROM waybill WHERE waybill_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$id]);
         }
 
         // function to delete entry from inventory_signatory where user_id is given
         protected function blockSignatory(int $user_id, string $inventory_unique_id) {
-            $sql = "UPDATE login SET blocked = ? WHERE id = ? AND user_id = ? AND inventory_unique_id = ?";
+            $sql = "UPDATE login SET blocked = ? WHERE user_id = ? AND user_id = ? AND inventory_unique_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([true, $user_id, $inventory_unique_id]);
         }

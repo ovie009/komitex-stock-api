@@ -13,15 +13,35 @@
         }
 
         // function to add new location to location table, requires company_id, location, charge
-        protected function createLocation($company_id, $location, $charge) {
+        protected function createLocation(string $company_id, string $location, float $charge) {
             $sql = "INSERT INTO location (company_id, location, charge) VALUES (?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$company_id, $location, $charge]);
         }
 
+        // function to check if location already exist, where company_id, location is given
+        protected function checkLocationExist(string $location, string $company_id) {
+            $sql = "SELECT * FROM location WHERE company_id = ? AND location = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$company_id, $location]);
+            $row = $stmt->fetch();
+            if ($row) return true;
+            else return false;
+        }
+
+        // function to check if any entry exist in location table where company_id is given
+        protected function checkCompanyLocationEmpty(string $company_id) {
+            $sql = "SELECT * FROM location WHERE company_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$company_id]);
+            $row = $stmt->fetch();
+            if ($row) return true;
+            else return false;
+        }
+
         // function to edit location and charge where id is given
-        protected function setLocation($id, $location, $charge) {
-            $sql = "UPDATE location SET location = ?, charge = ?, edited_timestamp = CURRENT_TIMESTAMP WHERE id = ?";
+        protected function setLocation(int $id, string $location, float $charge) {
+            $sql = "UPDATE location SET location = ?, charge = ?, edited_timestamp = CURRENT_TIMESTAMP WHERE location_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$location, $charge, $id]);
         }
@@ -36,7 +56,7 @@
         // function to block staff from company
         // set blocked as true in login table
         protected function blockStaff(int $staff_id, string $company_id) {
-            $sql = "UPDATE login SET blocked = ? WHERE id = ? AND company_id = ?";
+            $sql = "UPDATE login SET blocked = ? WHERE user_id = ? AND company_id = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([true, $staff_id, $company_id]);
         } 

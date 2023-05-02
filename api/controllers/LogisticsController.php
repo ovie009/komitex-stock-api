@@ -97,6 +97,8 @@
             $inventory_name = '';
 
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
+
+            return 'success';
         }
 
         // function to edit location and charge in location table where id is given
@@ -126,11 +128,20 @@
 
             // log this event into the activities table
             $this->addActivity($summary, $company_id, $inventory_unique_id, $inventory_name, $fullname, $user_id);
+
+            return 'success';
+        }
+
+        // function to check if location table is empty for given company_id
+        public function locationTableNotEmpty(string $company_id) {
+            return $this->checkCompanyLocationEmpty($company_id);
         }
 
         // function to block staff
         public function blockMyStaff(int $staff_id, int $company_id) {
             $this->blockStaff($staff_id, $company_id);
+
+            return 'success';
         }
     }
 
